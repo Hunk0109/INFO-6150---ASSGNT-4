@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Feedback</title>
+    <style>
+        label {
+            float: left;
+            width: 150px;
+        }
+
+        #container {
+            width: 700px;
+            margin: auto;
+            background-color: beige;
+        }
+
+        main {
+            padding: 50px;
+        }
+
+        .error {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+<div id="container">
+    <main>
+        <h2>Feedback</h2>
+        <h3>Love something? Hate something? Let us know!</h3>
+        Note: Fields marked with an asterisk(*) are mandatory
+        <br><br>
+        <form method="post" id="feedbackForm" novalidate>
+            <label>Title*:</label>
+            <input type="radio" name="title" id="miss" value="miss" required="required"/>Miss
+            <input type="radio" name="title" id="mr" value="mr" required="required"/>Mr.
+            <input type="radio" name="title" id="mrs" value="mrs" required="required"/>Mrs.
+            <br><br>
+            <label for="firstName">First Name*:</label>
+            <input type="text" name="firstName" id="firstName" placeholder="First Name" required="required" minlength="2" maxlength="50" pattern="[A-Za-z\s]+"/>
+            <span class="error" id="firstNameError"></span>
+            <br><br>
+
+            <label for="lastName">Last Name*:</label>
+            <input type="text" name="lastName" id="lastName" placeholder="Last Name" required="required" minlength="2" maxlength="50" pattern="[A-Za-z\s]+"/>
+            <span class="error" id="lastNameError"></span>
+            <br><br>
+
+            <label for="emailId">Email Id*:</label>
+            <input type="text" name="emailId" id="emailId" placeholder="yourname@domain.com" required="required" pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}"/>
+            <span class="error" id="emailIdError"></span>
+            <br><br>
+
+            <label for="phoneNumber">Phone Number*:</label>
+            <input type="text" name="phoneNumber" id="phoneNumber" placeholder="xxx-xxx-xxxx" required="required" pattern="\d{3}-\d{3}-\d{4}" minlength="10" maxlength="12"/>
+            <span class="error" id="phoneNumberError"></span>
+            <br><br>
+
+            <label for="streetAddress1">Street Address 1*:</label>
+            <input type="text" name="streetAddress1" id="streetAddress1" placeholder="Street Address 1" required="required" minlength="2" maxlength="100"/>
+            <span class="error" id="streetAddress1Error"></span>
+            <br><br>
+
+            <label for="streetAddress2">Street Address 2:</label>
+            <input type="text" name="streetAddress2" id="streetAddress2" placeholder="Street Address 2" maxlength="100"/>
+            <br><br>
+
+            <label for="city">City*:</label>
+            <input type="text" name="city" id="city" placeholder="City" required="required" minlength="2" maxlength="50"/>
+            <span class="error" id="cityError"></span>
+            <br><br>
+
+            <label for="state">State*:</label>
+            <input type="text" name="state" id="state" placeholder="State" required="required" minlength="2" maxlength="50"/>
+            <span class="error" id="stateError"></span>
+            <br><br>
+
+            <label for="zipcode">ZipCode*:</label>
+            <input type="text" name="zipcode" id="zipcode" placeholder="xxxxxx" required="required" pattern="\d{6}"/>
+            <span class="error" id="zipcodeError"></span>
+            <br><br>
+
+            <label>How did you hear*:</label>
+            <input type='checkbox' name="source" value="facebook" id="sourceFacebook"/> Facebook
+            <input type='checkbox' name="source" value="google" id="sourceGoogle"/> Google
+            <input type='checkbox' name="source" value="yelp" id="sourceYelp"/> Yelp
+            <br><br>
+
+            <label for="comments">Comments*:</label>
+            <textarea name="comments" id="comments" placeholder="Your comments" rows="5" cols="25" required="required" minlength="2" maxlength="500"></textarea>
+            <span class="error" id="commentsError"></span>
+            <br><br>
+
+            <label for="Drinks">Drinks* - </label>
+            <select id="mySelect" onchange="addCheckboxAndTextField()">
+                <option value="option1">Water</option>
+                <option value="option2">Tea</option>
+                <option value="option3">Coffee</option>
+                <option value="option4">Soda</option>
+                <option value="option5">Juice</option>
+            </select>
+            <br><br>
+
+            <div id="checkboxContainer">
+                <!-- Checkbox and text field will be added here dynamically -->
+            </div>
+            <br><br>
+            <!-- <input type="Submit" id="submitButton" disabled> -->
+            <button id="submitButton" type="submit">Submit</button>
+            <input type="Reset">
+            <br><br>
+        </form>
+    </main>
+</div>
+
+<div id="resultDiv">
+    <!-- The table will be displayed here -->
+</div>
+</body>
+<script>
+    function addCheckboxAndTextField() {
+        // Get the selected drink option
+        const selectElement = document.getElementById("mySelect");
+        const selectedOption = selectElement.value;
+        
+        // Get the container where checkboxes and text fields will be added
+        const checkboxContainer = document.getElementById("checkboxContainer");
+        
+        // Clear any existing content in the container
+        checkboxContainer.innerHTML = "";
+        
+        // Define the checkbox options based on the selected drink
+        let checkboxOptions = [];
+        
+        if (selectedOption === "option1" || selectedOption === "option4") {
+            checkboxOptions = ["Small", "Large"];
+        } else if (selectedOption === "option2" || selectedOption === "option3" || selectedOption === "option5") {
+            checkboxOptions = ["Small", "Medium", "Large"];
+        }
+        
+        // Add a label "Select your size:"
+        const sizeLabel = document.createElement("label");
+        sizeLabel.textContent = "Select your size:";
+        checkboxContainer.appendChild(sizeLabel);
+        
+        // Create and add checkboxes to the container
+        for (const option of checkboxOptions) {
+            const checkbox = document.createElement("input");
+            checkbox.type = "checkbox";
+            checkbox.name = "drinkSize";
+            checkbox.value = option;
+            
+            // Attach an event listener to the checkbox to toggle the text field
+            checkbox.addEventListener("change", function() {
+                const textField = document.getElementById("textField");
+                if (this.checked) {
+                    textField.style.display = "block";
+                    textField.required = true;
+                } else {
+                    textField.style.display = "none";
+                    textField.required = false;
+                }
+            });
+            
+            const label = document.createElement("label");
+            label.textContent = option;
+            
+            checkboxContainer.appendChild(checkbox);
+            checkboxContainer.appendChild(label);
+        }
+        
+        // Add a text field to the container
+        const textField = document.createElement("input");
+        textField.type = "text";
+        textField.id = "textField";
+        textField.name = "drinkNotes";
+        textField.placeholder = "Enter any additional notes";
+        textField.style.display = "none"; // Initially hide the text field
+        
+        checkboxContainer.appendChild(textField);
+    }
+
+    // Function to validate a specific field
+    function validateField(field) {
+        const errorSpan = document.getElementById(field.id + "Error");
+        errorSpan.textContent = "";
+
+        if (field.hasAttribute("required") && field.value.trim() === "") {
+            errorSpan.textContent = "This field is required.";
+        } else if (field.hasAttribute("minlength") && field.value.length < parseInt(field.getAttribute("minlength"))) {
+            errorSpan.textContent = "Minimum length: " + field.getAttribute("minlength") + " characters.";
+        } else if (field.hasAttribute("maxlength") && field.value.length > parseInt(field.getAttribute("maxlength"))) {
+            errorSpan.textContent = "Maximum length: " + field.getAttribute("maxlength") + " characters.";
+        } else if (field.hasAttribute("pattern") && !new RegExp(field.getAttribute("pattern")).test(field.value)) {
+            errorSpan.textContent = "Invalid format.";
+        }
+
+        if (field.id === "emailId") {
+            const emailError = validateemailId(field.value);
+            if (emailError) {
+                errorSpan.textContent = emailError;
+            }
+        }
+
+        if (field.id === "phoneNumber") {
+            const phoneError = validatephoneNumber(field.value);
+            if (phoneError) {
+                errorSpan.textContent = phoneError;
+            }
+        }
+    }
+
+    function validateemailId(emailId) {
+        if (!emailId.endsWith("@northeastern.edu")) {
+            return "Invalid email address. Please use @northeastern.edu domain.";
+        }
+        return "";
+    }
+
+    function validatephoneNumber(phoneNumber) {
+        if (!/^\d{3}-?\d{3}-\d{4}$/.test(phoneNumber)) {
+            return "Invalid Phone Number. Please enter a valid phone number (e.g., ###-###-####).";
+        }
+        return "";
+    }
+
+    // Function to validate the submit button
+    function validateSubmitButton(inputFields, submitButton) {
+        let isValid = true;
+
+        inputFields.forEach(function (input) {
+            if (input.hasAttribute("required") && input.value.trim() === "") {
+                isValid = false;
+            } else if (input.hasAttribute("minlength") && input.value.length < parseInt(input.getAttribute("minlength"))) {
+                isValid = false;
+            } else if (input.hasAttribute("maxlength") && input.value.length > parseInt(input.getAttribute("maxlength"))) {
+                isValid = false;
+            } else if (input.hasAttribute("pattern") && !new RegExp(input.getAttribute("pattern")).test(input.value)) {
+                isValid = false;
+            }
+        });
+
+        submitButton.disabled = !isValid;
+    }
+
+    // Function to validate the entire form
+    function validateForm() {
+        const form = document.getElementById("feedbackForm");
+        const submitButton = document.getElementById("submitButton");
+
+        // Add event listeners for input fields to validate on key events (input)
+        const inputFields = form.querySelectorAll("input, textarea, select");
+        inputFields.forEach(function (input) {
+            input.addEventListener("input", function () {
+                validateField(input);
+                validateSubmitButton(inputFields, submitButton);
+            });
+        });
+
+        // Initial validation
+        validateSubmitButton(inputFields, submitButton);
+    }
+
+    // Initial form validation
+    validateForm();
+
+    // Function to handle form submission
+    document.getElementById("feedbackForm").addEventListener("submit", function (e) {
+        e.preventDefault(); // Prevent default form submission
+
+        // Get the form data
+        const formData = new FormData(this);
+
+        // Create a table element
+        const table = createTable(formData);
+
+        // Clear previous data in "resultDiv"
+        const resultDiv = document.getElementById("resultDiv");
+        resultDiv.innerHTML = "";
+
+        // Add the table to the resultDiv
+        resultDiv.appendChild(table);
+
+        // Clear the form for the next submission (optional)
+        this.reset();
+    });
+
+    // Function to create and populate a table with user inputs
+    function createTable(formData) {
+        // Create a table element
+        const table = document.createElement("table");
+
+        // Create a table row for headers
+        const headers = ["Title", "First Name", "Last Name", "Email Id", "Phone Number", "Street Address 1", "Street Address 2", "City", "State", "ZipCode", "Comments", "Drinks (Size)"];
+        const headerRow = table.insertRow();
+        headers.forEach(function (headerText) {
+            const th = document.createElement("th");
+            th.textContent = headerText;
+            headerRow.appendChild(th);
+        });
+
+        // Create a table row for user input data
+        const dataRow = table.insertRow();
+        headers.forEach(function (header) {
+            const cell = dataRow.insertCell();
+            // Modify the keys used here to match your form field names
+            let key = header.toLowerCase().replace(/\s+/g, '');
+            if (key === "emailid") {
+                key = "emailId"; // Match the key for Email Id
+            } else if (key === "zipcode") {
+                key = "zipcode"; // Match the key for ZipCode
+            } else if (key === "comments") {
+                key = "comments"; // Match the key for Comments
+            } else if (key === "drinks(size)") {
+                key = "drinkSize"; // Match the key for Drinks (Size)
+            } else if (key === "firstname") {
+                key = "firstName"; // Match the key for First Name
+            } else if (key === "lastname") {
+                key = "lastName"; // Match the key for Last Name
+            } else if (key === "phonenumber") {
+                key = "phoneNumber"; // Match the key for Phone Number
+            } else if (key === "streetaddress1") {
+                key = "streetAddress1"; // Match the key for Street Address 1
+            } else if (key === "streetaddress2") {
+                key = "streetAddress2"; // Match the key for Street Address 2
+            }
+            cell.textContent = formData.get(key);
+        });
+
+        return table;
+    }
+</script>
+</html>
